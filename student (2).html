@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة الطالب | شركة مدارس النبلاء الأهلية - أ. محمد جابر</title>
+    <link rel="icon" type="image/jpeg" href="https://i.postimg.cc/tCjJ5HdF/2222.jpg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --nobala-maroon: #9E2A35;
+            --nobala-maroon-dark: #781B24;
+            --nobala-gold: #DFC875;
+            --nobala-cream: #FAF8F5;
+        }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--nobala-cream);
+            background-image: 
+                radial-gradient(#DFC875 0.85px, transparent 0.85px), 
+                radial-gradient(#9E2A35 0.6px, #FAF8F5 0.6px);
+            background-size: 36px 36px;
+            background-position: 0 0, 18px 18px;
+            min-height: 100vh;
+        }
+        .nobala-btn-primary {
+            background: linear-gradient(135deg, #9E2A35 0%, #781B24 100%);
+            color: white;
+            transition: all 0.2s ease;
+        }
+        .nobala-btn-primary:hover {
+            background: linear-gradient(135deg, #781B24 0%, #5e131b 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(158, 42, 53, 0.3);
+        }
+        .option-card {
+            transition: all 0.2s ease;
+        }
+        .option-card.selected {
+            border-color: var(--nobala-maroon);
+            background-color: #FDF2F3;
+            box-shadow: 0 0 0 4px rgba(158, 42, 53, 0.18);
+        }
+        .option-card.selected .opt-letter {
+            background-color: var(--nobala-maroon);
+            color: var(--nobala-gold);
+            border-color: var(--nobala-maroon);
+        }
+        .nobala-highlight-bar {
+            background: linear-gradient(90deg, rgba(223,200,117,0.35) 0%, rgba(223,200,117,0.8) 50%, rgba(223,200,117,0.35) 100%);
+        }
+    </style>
+</head>
+<body class="p-3 md:p-8 flex flex-col items-center justify-center">
+
+    <div class="w-full max-w-4xl bg-white rounded-[2rem] shadow-2xl overflow-hidden border-4 border-[#DFC875]">
+        
+        <!-- الترويسة الرسمية -->
+        <header class="bg-white p-5 md:px-8 border-b-4 border-[#9E2A35] relative">
+            <div class="absolute top-0 right-0 left-0 h-2.5 bg-gradient-to-l from-[#9E2A35] via-[#DFC875] to-[#9E2A35]"></div>
+
+            <div class="flex flex-wrap items-center justify-between gap-4 pt-2">
+                <div class="flex items-center gap-4">
+                    <div class="w-20 h-20 md:w-24 md:h-24 rounded-2xl bg-white border-2 border-[#DFC875] flex items-center justify-center p-1.5 shadow-md shrink-0 overflow-hidden">
+                        <img src="https://i.postimg.cc/tCjJ5HdF/2222.jpg" alt="شعار شركة مدارس النبلاء الأهلية" class="w-full h-full object-contain">
+                    </div>
+                    <div>
+                        <h1 class="font-black text-xl md:text-2xl text-[#9E2A35]">شركة مدارس النبلاء الأهلية</h1>
+                        <p class="text-xs font-extrabold text-[#8a3b42] dir-ltr text-right">Alnobalaa Private Schools CO.</p>
+                        <div class="flex flex-wrap items-center gap-2 mt-2">
+                            <span class="nobala-highlight-bar px-3 py-1 rounded-lg text-xs font-black text-slate-900">تأسيس وبناء - بنين</span>
+                            <span class="text-xs md:text-sm font-extrabold text-slate-700">| الدراسات الاجتماعية - أ. محمد جابر</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col items-end gap-2">
+                    <span id="syncStatusText" class="text-xs font-extrabold px-3 py-1 rounded-full bg-amber-50 text-amber-800 border border-amber-300">
+                        ⏳ جاري تحميل قائمة الأسماء...
+                    </span>
+                    <div id="studentHeaderBadge" class="hidden bg-[#FDF2F3] border-2 border-[#9E2A35]/30 px-5 py-2 rounded-2xl text-left">
+                        <span id="loggedStudentName" class="block text-base md:text-lg font-black text-[#9E2A35]"></span>
+                        <span id="loggedStudentClass" class="text-xs md:text-sm text-slate-700 font-bold"></span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- الشاشة 1: دخول سهل جداً (الصف -> الفصل -> اختيار الاسم من القائمة أو كتابته) -->
+        <section id="screen-login" class="p-6 md:p-10 space-y-6">
+            <div class="text-center space-y-2">
+                <h2 class="text-2xl md:text-3xl font-black text-[#9E2A35]">أهلاً بك يا بطل النبلاء 👋</h2>
+                <p class="text-base md:text-lg text-slate-600 font-bold">اختر صفك وفصلك ثم اختر اسمك لتبدأ الحل فوراً</p>
+            </div>
+
+            <form onsubmit="doLogin(event)" class="space-y-5 max-w-md mx-auto bg-[#FAF8F5] p-6 md:p-8 rounded-3xl border-2 border-[#DFC875] shadow-md">
+  <div><label class="block text-base font-black text-[#9E2A35] mb-2">1️⃣ اختر الصف:</label>
+  <select id="loginGrade" onchange="updateLoginClasses()" class="w-full border-2 border-[#DFC875] rounded-2xl p-4 text-lg font-black bg-white outline-none">
+   <option value="4">الصف الرابع الابتدائي</option><option value="5" selected>الصف الخامس الابتدائي</option><option value="6">الصف السادس الابتدائي</option></select></div>
+  <div><label class="block text-base font-black text-[#9E2A35] mb-2">2️⃣ اختر الفصل:</label>
+  <select id="loginClass" onchange="fillNames()" class="w-full border-2 border-[#DFC875] rounded-2xl p-4 text-lg font-black bg-white outline-none"></select></div>
+  <div><label class="block text-base font-black text-[#9E2A35] mb-2">3️⃣ اختر اسمك:</label>
+  <select id="nameSel" required class="w-full border-2 border-[#9E2A35] rounded-2xl p-4 text-lg font-black bg-white outline-none"></select></div>
+  <div><label class="block text-base font-black text-[#9E2A35] mb-2">4️⃣ رمز الدخول (4 أرقام من معلمك):</label>
+  <input id="pinIn" required inputmode="numeric" pattern="[0-9]{4}" maxlength="4" autocomplete="off" placeholder="••••" class="w-full border-2 border-[#DFC875] rounded-2xl p-4 text-2xl text-center tracking-[.5em] font-black bg-white outline-none"></div>
+  <p id="loginErr" class="text-center text-rose-700 font-black"></p>
+  <button id="loginBtn" type="submit" class="w-full nobala-btn-primary font-black py-4 rounded-2xl shadow-lg text-xl">دخول إلى الاختبارات</button>
+</form>
+        </section>
+
+        <!-- الشاشة 2: قائمة الاختبارات المفعلة للفصل -->
+        <section id="screen-quizzes" class="hidden p-6 md:p-8 space-y-6">
+            <div class="flex flex-wrap items-center justify-between gap-3 bg-[#FAF8F5] p-5 rounded-2xl border-2 border-[#DFC875]">
+                <div>
+                    <h3 class="font-black text-[#9E2A35] text-xl">الاختبارات المتاحة لك الآن</h3>
+                    <p class="text-sm text-slate-600 font-bold">اضغط على زر (ابدأ الاختبار الآن) لحل الأسئلة</p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="fetchCloudDataAndRefresh(true)" class="bg-amber-100 text-amber-950 border border-amber-400 px-4 py-2 rounded-xl text-sm font-black">
+                        🔄 تحديث
+                    </button>
+                    <button onclick="logoutStudent()" class="bg-white hover:bg-[#FDF2F3] text-[#9E2A35] border-2 border-[#9E2A35]/40 px-4 py-2 rounded-xl text-sm font-black transition">
+                        تغيير الطالب
+                    </button>
+                </div>
+            </div>
+
+            <div id="studentQuizzesList" class="space-y-4"></div>
+        </section>
+
+        <!-- الشاشة 3: شاشة حل الأسئلة -->
+        <section id="screen-exam" class="hidden p-5 md:p-8 space-y-6">
+            <div class="sticky top-2 z-20 bg-[#9E2A35] text-white p-4 md:p-5 rounded-2xl shadow-xl flex items-center justify-between border-b-4 border-[#DFC875]">
+                <div>
+                    <span id="examTitleBanner" class="font-black text-lg md:text-xl text-[#DFC875] block"></span>
+                    <span id="examProgressText" class="text-xs md:text-sm text-white/90 font-bold"></span>
+                </div>
+                <div class="bg-[#781B24] border-2 border-[#DFC875] px-5 py-2 rounded-xl text-center shrink-0">
+                    <span class="text-xs block text-[#DFC875] font-extrabold">الوقت المتبقي</span>
+                    <span id="examTimer" class="font-mono font-black text-xl md:text-2xl text-white">15:00</span>
+                </div>
+            </div>
+
+            <div id="examQuestionsContainer" class="space-y-6"></div>
+
+            <div class="pt-6 border-t-2 border-[#DFC875] flex justify-center">
+                <button onclick="submitStudentExam()" class="w-full md:w-2/3 nobala-btn-primary font-black px-10 py-5 rounded-2xl shadow-xl text-xl flex items-center justify-center gap-3">
+                    <i class="fa-solid fa-check-double text-[#DFC875] text-2xl"></i>
+                    <span>انتهيت.. أرسل الإجابة للمعلم</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- الشاشة 4: شاشة النتيجة الفورية -->
+        <section id="screen-result" class="hidden p-6 md:p-10 space-y-6 text-center">
+            <div class="p-8 rounded-3xl bg-[#FAF8F5] border-4 border-[#DFC875] space-y-4 shadow-inner">
+                <img src="https://i.postimg.cc/tCjJ5HdF/2222.jpg" alt="شعار مدارس النبلاء" class="w-24 h-24 mx-auto object-contain rounded-2xl border-2 border-[#DFC875] bg-white p-1.5 shadow">
+                <h2 class="text-2xl md:text-3xl font-black text-slate-800">بارك الله فيك يا بطل النبلاء! 🌟</h2>
+                <div class="inline-block nobala-highlight-bar px-10 py-4 rounded-2xl border-2 border-[#DFC875]">
+                    <p id="resultScoreText" class="text-3xl md:text-4xl font-black text-[#9E2A35]"></p>
+                </div>
+                <p class="text-base text-emerald-800 font-black">✔ وصلت درجتك الآن إلى معلمك أ. محمد جابر بنجاح</p>
+            </div>
+
+            <div id="resultReviewBox" class="text-right space-y-4 max-h-96 overflow-y-auto p-2"></div>
+
+            <button onclick="backToStudentQuizzes()" class="nobala-btn-primary font-black px-10 py-4 rounded-2xl shadow text-lg">
+                العودة إلى القائمة الرئيسية
+            </button>
+        </section>
+
+        <footer class="bg-[#781B24] text-white px-6 py-4 flex flex-wrap items-center justify-between gap-2 text-xs md:text-sm border-t-4 border-[#DFC875]">
+            <div class="font-extrabold flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-[#DFC875]"></span>
+                <span>شركة مدارس النبلاء الأهلية - مادة الدراسات الاجتماعية (أ. محمد جابر)</span>
+            </div>
+            <div class="flex items-center gap-4 text-[#DFC875] font-mono font-bold text-xs">
+                <span>920 009 659</span>
+                <span>@Nobalaschool</span>
+            </div>
+        </footer>
+
+    </div>
+
+    <script>
+const GAS_URL='https://script.google.com/macros/s/AKfycbwOfsg3NvOveFBy0X7UOozFi0WoR9yMcYz-Kvb85mW8Kv7_SiKpOPc1JLDTsCqkbKOb/exec';
+const CLASSES_BY_GRADE={'4':['4-1','4-2','4-3','رابع تحفيظ'],'5':['خامس أول','خامس ثاني','خامس ثالث'],'6':['سادس أول','سادس ثاني']};
+const LET=['أ','ب','ج','د','هـ','و'];
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let pub=[],me=null,pin='',attId=null,Q=[],A={},endAt=0,tick=null,sending=false;
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+async function api(b){for(let i=0;i<3;i++){try{const r=await (await fetch(GAS_URL,{method:'POST',body:JSON.stringify(b)})).json();if(r&&r.status==='ok'&&!('ok' in r))throw new Error('incomplete');return r;}catch(e){if(i===2)throw e;await sleep(1500*(i+1));}}}
+function showScreen(id){['screen-login','screen-quizzes','screen-exam','screen-result'].forEach(x=>$(x).classList.toggle('hidden',x!==id));window.scrollTo(0,0);}
+
+async function loadPub(){
+  const st=$('syncStatusText');st.textContent='⏳ جاري تحميل الأسماء...';
+  try{pub=(await (await fetch(GAS_URL+'?action=getPublic&t='+Date.now())).json()).students||[];
+    st.className='text-xs font-extrabold px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-300';st.textContent='✔ متصل';}
+  catch(e){st.textContent='⚠ تعذر الاتصال، تحقق من الإنترنت';}
+  fillNames();
+}
+function updateLoginClasses(){$('loginClass').innerHTML=(CLASSES_BY_GRADE[$('loginGrade').value]||[]).map(c=>`<option>${esc(c)}</option>`).join('');fillNames();}
+function fillNames(){
+  const g=$('loginGrade').value,c=$('loginClass').value,l=pub.filter(s=>s.className===c&&String(s.grade)===g);
+  $('nameSel').innerHTML='<option value="">-- اختر اسمك --</option>'+l.map(s=>`<option value="${esc(s.id)}">${esc(s.name)}</option>`).join('');
+}
+async function doLogin(e){
+  e.preventDefault();$('loginErr').textContent='';$('loginBtn').disabled=true;
+  try{const p=$('pinIn').value.trim();const r=await api({action:'login',studentId:$('nameSel').value,pin:p});
+    if(!r.ok){$('loginErr').textContent=r.error||'تعذر الدخول';return;}
+    me=r.student;pin=p;$('pinIn').value='';
+    $('loggedStudentName').textContent=me.name;$('loggedStudentClass').textContent=`الصف ${me.grade} | ${me.className}`;
+    $('studentHeaderBadge').classList.remove('hidden');renderQuizzes(r.quizzes);showScreen('screen-quizzes');
+  }catch(err){$('loginErr').textContent='تعذر الاتصال، حاول مرة أخرى';}
+  finally{$('loginBtn').disabled=false;}
+}
+async function fetchCloudDataAndRefresh(){
+  try{const r=await api({action:'login',studentId:me.id,pin});if(r.ok)renderQuizzes(r.quizzes);}catch(e){alert('تعذر التحديث، تحقق من الإنترنت');}
+}
+function backToStudentQuizzes(){fetchCloudDataAndRefresh();showScreen('screen-quizzes');}
+function logoutStudent(){me=null;pin='';$('studentHeaderBadge').classList.add('hidden');showScreen('screen-login');}
+
+function renderQuizzes(list){
+  const lab={before:q=>`<span class="px-5 py-3 rounded-xl bg-amber-100 text-amber-900 font-black">⏳ يبدأ يوم ${esc(q.startDate)}</span>`,
+   after:()=>`<span class="px-5 py-3 rounded-xl bg-rose-100 text-[#9E2A35] font-black">انتهى وقت الاختبار</span>`,
+   missed:()=>`<span class="px-5 py-3 rounded-xl bg-rose-100 text-[#9E2A35] font-black">فاتك موعد الاختبار</span>`,
+   done:()=>`<span class="px-5 py-3 rounded-xl bg-emerald-100 text-emerald-800 font-black">✔ تم الحل</span>`};
+  $('studentQuizzesList').innerHTML=list.length?list.map(q=>`
+   <div class="p-6 rounded-3xl border-2 ${q.state==='done'?'bg-slate-50 border-slate-200':'bg-white border-[#DFC875]'} flex flex-wrap items-center justify-between gap-4 shadow-md">
+    <div class="space-y-1.5"><span class="px-3 py-1 rounded-full bg-[#FDF2F3] text-[#9E2A35] text-xs font-black">${esc(q.unit)}</span>
+     <h4 class="font-black text-slate-900 text-xl md:text-2xl pt-1">${esc(q.title)}</h4>
+     ${q.best!=null?`<p class="font-black text-emerald-700">🌟 درجتك: ${q.best} من 10</p>`:''}</div>
+    <div>${q.state==='open'?`<button onclick="startQuiz('${esc(q.id)}')" class="nobala-btn-primary font-black px-8 py-4 rounded-2xl text-lg shadow-lg"><i class="fa-solid fa-play text-[#DFC875]"></i> ابدأ الاختبار الآن</button>`:lab[q.state](q)}</div></div>`).join('')
+   :`<div class="p-12 text-center bg-[#FAF8F5] rounded-3xl border-2 border-dashed border-[#DFC875]"><h4 class="font-black text-[#9E2A35] text-xl">لا يوجد اختبار مفتوح لفصلك الآن</h4><p class="text-slate-600 font-bold mt-2">عندما يفتح المعلم الاختبار سيظهر لك هنا.</p></div>`;
+}
+
+async function startQuiz(qid){
+  if(!confirm('ستبدأ الاختبار الآن ويبدأ العدّ التنازلي. هل أنت مستعد؟'))return;
+  try{const r=await api({action:'startAttempt',studentId:me.id,pin,quizId:qid});
+    if(!r.ok){alert(r.error==='busy'?'الخادم مزدحم الآن، انتظر قليلاً ثم اضغط ابدأ مرة أخرى':r.error);fetchCloudDataAndRefresh();return;}
+    attId=r.attemptId;Q=r.questions;A={};
+    Q.forEach(q=>{if(q.type==='order')A[q.id]=q.items.slice();if(q.type==='match')A[q.id]=q.left.map(()=> '');});
+    try{const sv=JSON.parse(localStorage.getItem('ans_'+attId)||'null');if(sv)Q.forEach(q=>{if(sv[q.id]!==undefined&&(q.type!=='order'||sv[q.id].length===q.items.length))A[q.id]=sv[q.id];});}catch(e){}
+    $('examTitleBanner').textContent=document.title.split('|')[0];$('examProgressText').textContent=`عدد الأسئلة: ${Q.length}`;
+    renderExam();showScreen('screen-exam');startTimer(r.remainingSec);
+  }catch(e){alert('تعذر بدء الاختبار، تحقق من الإنترنت');}
+}
+function startTimer(sec){
+  clearInterval(tick);endAt=Date.now()+sec*1000;
+  const paint=()=>{const rem=Math.max(0,Math.ceil((endAt-Date.now())/1000));
+    $('examTimer').textContent=String(Math.floor(rem/60)).padStart(2,'0')+':'+String(rem%60).padStart(2,'0');
+    $('examTimer').style.color=rem<=120?'#fca5a5':'';
+    if(rem<=0){clearInterval(tick);submitStudentExam(true);}};
+  paint();tick=setInterval(paint,500);
+}
+function renderExam(){
+  $('examQuestionsContainer').innerHTML=Q.map((q,qi)=>{
+    let b='';
+    if(q.type==='mcq'||q.type==='tf')b=`<div class="grid sm:grid-cols-2 gap-3.5 pt-2">${q.options.map((o,oi)=>`
+      <div onclick="pick(${qi},${oi})" class="option-card ${A[q.id]===o?'selected':''} cursor-pointer p-4 rounded-2xl border-2 border-slate-200 bg-white flex items-center gap-3 text-lg font-black">
+       <span class="opt-letter w-11 h-11 rounded-xl bg-[#FAF8F5] border-2 border-[#DFC875] text-[#9E2A35] flex items-center justify-center shrink-0">${LET[oi]||oi+1}</span><span>${esc(o)}</span></div>`).join('')}</div>`;
+    else if(q.type==='short')b=`<input type="text" oninput="A[Q[${qi}].id]=this.value;saveA()" value="${esc(A[q.id]||'')}" placeholder="اكتب الإجابة هنا..." class="w-full border-2 border-slate-300 rounded-xl p-4 text-lg font-black bg-white outline-none mt-2">`;
+    else if(q.type==='match')b=`<div class="space-y-3 mt-2">${q.left.map((l,pi)=>`<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-[#FAF8F5] p-3.5 rounded-xl border-2 border-slate-200">
+      <span class="text-lg font-black">${pi+1}. ${esc(l)}</span>
+      <select onchange="A[Q[${qi}].id][${pi}]=this.value;saveA()" class="border-2 border-[#9E2A35]/40 rounded-xl p-3 font-extrabold bg-white"><option value="">-- اختر --</option>
+      ${q.right.map(r=>`<option value="${esc(r)}" ${A[q.id][pi]===r?'selected':''}>${esc(r)}</option>`).join('')}</select></div>`).join('')}</div>`;
+    else if(q.type==='order')b=`<div class="space-y-2.5 mt-2">${A[q.id].map((t,i)=>`<div class="flex items-center justify-between bg-[#FAF8F5] p-3.5 rounded-xl border-2 border-slate-200">
+      <div class="flex items-center gap-3"><span class="w-9 h-9 rounded-xl bg-[#9E2A35] text-[#DFC875] font-black flex items-center justify-center">${i+1}</span><span class="text-lg font-black">${esc(t)}</span></div>
+      <div class="flex gap-2"><button type="button" onclick="mv(${qi},${i},-1)" class="px-3.5 py-2 bg-white rounded-xl border-2 border-[#DFC875]">🔼</button><button type="button" onclick="mv(${qi},${i},1)" class="px-3.5 py-2 bg-white rounded-xl border-2 border-[#DFC875]">🔽</button></div></div>`).join('')}</div>`;
+    return `<div class="p-6 rounded-3xl border-2 border-[#DFC875] bg-white space-y-3 shadow-md relative overflow-hidden"><div class="absolute top-0 right-0 w-2.5 h-full bg-[#9E2A35]"></div>
+     <span class="px-4 py-1.5 bg-[#9E2A35] text-[#DFC875] rounded-xl text-sm font-black">السؤال (${qi+1})</span>
+     <h4 class="font-black text-slate-900 text-xl md:text-2xl leading-relaxed">${esc(q.text)}</h4>${b}</div>`;}).join('');
+}
+function saveA(){try{localStorage.setItem('ans_'+attId,JSON.stringify(A));}catch(e){}}
+function pick(qi,oi){A[Q[qi].id]=Q[qi].options[oi];saveA();renderExam();}
+function mv(qi,i,d){const a=A[Q[qi].id],j=i+d;if(j<0||j>=a.length)return;[a[i],a[j]]=[a[j],a[i]];saveA();renderExam();}
+const answered=q=>q.type==='order'||(q.type==='match'?A[q.id].every(Boolean):!!(A[q.id]&&String(A[q.id]).trim()));
+
+async function submitStudentExam(auto=false){
+  if(sending)return;
+  if(!auto){const n=Q.filter(q=>!answered(q)).length;
+    if(!confirm(n?`لم تجب على ${n} سؤال. هل تريد الإرسال؟`:'هل أنت متأكد من إرسال إجاباتك؟'))return;}
+  sending=true;let r=null;
+  for(let i=0;i<6&&!r;i++){try{r=await api({action:'submitAttempt',studentId:me.id,pin,attemptId:attId,answers:A});if(r&&r.error==='busy'){r=null;await sleep(3000*(i+1));}}catch(e){await sleep(3000);}}
+  sending=false;
+  if(!r||!r.ok){alert(r&&r.error?r.error:'⚠ لم يصل الإرسال! لا تغلق الصفحة، تحقق من الإنترنت ثم اضغط (أرسل الإجابة) مرة أخرى.');return;}
+  clearInterval(tick);try{localStorage.removeItem('ans_'+attId);}catch(e){}
+  $('resultScoreText').textContent=`الدرجة: ${r.score} من ${r.total}`+(r.late?' (تأخرت عن الوقت)':'');
+  $('resultReviewBox').innerHTML=r.review.map((x,i)=>`<div class="p-4 rounded-2xl border-2 ${x.ok?'bg-[#FAF8F5] border-[#DFC875]':'bg-rose-50 border-rose-300'} space-y-1">
+    <div class="font-black">${i+1}. ${esc(x.text)}</div><div class="font-extrabold ${x.ok?'text-emerald-700':'text-rose-700'}">إجابتك: ${esc(x.mine)} ${x.ok?'✔':'✘'}</div>
+    ${x.correct?`<div class="font-black text-[#9E2A35]">الإجابة الصحيحة: ${esc(x.correct)}</div>`:''}</div>`).join('');
+  showScreen('screen-result');
+}
+window.onload=()=>{const c=new URLSearchParams(location.search).get('class');
+  if(c){for(const g in CLASSES_BY_GRADE)if(CLASSES_BY_GRADE[g].includes(c))$('loginGrade').value=g;}
+  updateLoginClasses();if(c)$('loginClass').value=c;loadPub();};
+</script>
+</body>
+</html>
